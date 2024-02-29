@@ -30,7 +30,12 @@ Vagrant.configure("2") do |config|
       vb.cpus = 2
     end
     # Provision K3s controller installation
-    machine1.vm.provision "shell", path: "scripts/install-k3s-server.sh"
+    machine1.vm.provision "shell", inline: <<-SHELL
+      sudo apt-get update
+      sudo apt-get install -y apt-transport-https ca-certificates curl
+      curl -sfL https://get.k3s.io | sh -
+      sudo cp -f /var/lib/rancher/k3s/server/node-token /vagrant/confs/
+    SHELL
   end
 
   # Machine 2: lpucholSW (ServerWorker)
@@ -44,8 +49,11 @@ Vagrant.configure("2") do |config|
       vb.cpus = 2
     end  
     # Provision K3s agent installation
-    machine2.vm.provision "shell", path: "scripts/install-k3s-agent.sh"
-    
+    machine2.vm.provision "shell", inline: <<-SHELL
+      sudo apt-get update
+      sudo apt-get install -y apt-transport-https ca-certificates curl
+      curl -sfL https://get.k3s.io | K3S_URL=https://192.168.56.110:6443 K3S_TOKEN=$(cat /vagrant/confs/node-token) sh -
+    SHELL
   end  
 
   # Create a forwarded port mapping which allows access to a specific port
