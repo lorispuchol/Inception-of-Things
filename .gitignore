@@ -1,5 +1,3 @@
 .vagrant/
 credentials/
 node-token
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--docker --no-deploy traefik" sh -
-curl -sfL https://get.k3s.io | K3S_URL="https://192.168.56.110:6443" K3S_TOKEN="your_token" sh -
