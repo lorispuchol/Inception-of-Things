@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "lpucholS" do |server|
 
     # configure the box
-    server.vm.box = "bento/debian-12"
+    server.vm.box = "debian/bookworm64"
     server.vm.hostname = "lpucholS"
     server.vm.network "private_network", bridge: "eth1", ip: "192.168.56.110"
     server.vm.provider "virtualbox" do |vb|
@@ -34,7 +34,9 @@ Vagrant.configure("2") do |config|
     server.vm.provision "shell", inline: <<-SHELL
       sudo apt-get update
       sudo apt-get install -y curl net-tools
-      sudo curl -sfL https://get.k3s.io | K3S_TOKEN="1234" sh -
+      sudo systemctl stop nftables
+      sudo systemctl disable nftables
+      sudo curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --flannel-iface=eth1" sh -
       sudo mkdir -p /vagrant/credentials
       sudo cp -f /var/lib/rancher/k3s/server/node-token /vagrant/credentials/
     SHELL
@@ -43,7 +45,7 @@ Vagrant.configure("2") do |config|
   # Machine 2: lpucholSW (ServerWorker)
   config.vm.define "lpucholSW" do |serverworker|
     # configure the box
-    serverworker.vm.box = "bento/debian-12"
+    serverworker.vm.box = "debian/bookworm64"
     serverworker.vm.hostname = "lpucholSW"
     serverworker.vm.network "private_network", bridge: "eth1", ip: "192.168.56.111"
     serverworker.vm.provider "virtualbox" do |vb|
@@ -51,14 +53,15 @@ Vagrant.configure("2") do |config|
       vb.cpus = 2
     end  
     # Provision K3s agent installation
+    # K3S_URL is the URL of your server node = https://192.168.56.110
+    # 6443 is the default port for the K3s server node.
+    # K3S_TOKEN is stored at /var/lib/rancher/k3s/server/node-token on your server node.
     serverworker.vm.provision "shell", inline: <<-SHELL
       sudo apt-get update
       sudo apt-get install -y curl net-tools
-      sudo curl -sfL https://get.k3s.io | K3S_URL=https://192.168.56.110:6443 K3S_TOKEN="1234" sh -
-      # K3S_URL is the URL of your server node = https://192.168.56.110.
-      # 6443 is the default port for the K3s server node.
-      # K3S_TOKEN is stored at /var/lib/rancher/k3s/server/node-token on your server node.
-      sudo cat /vagrant/credentials/node-token >> lefichier.txt
+      sudo systemctl stop nftables
+      sudo systemctl disable nftables
+      sudo curl -sfL https://get.k3s.io | K3S_URL=https://192.168.56.110:6443 K3S_TOKEN_FILE="/vagrant/credentials/node-token" INSTALL_K3S_EXEC="agent --flannel-iface=eth1" sh -
     SHELL
   end  
 

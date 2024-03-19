@@ -1,3 +1,4 @@
 .vagrant/
 credentials/
 node-token
+.env
