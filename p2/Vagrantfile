@@ -1,16 +1,26 @@
 
+VM_BOX = "debian/bookworm64"
+MASTER_NODE = "lpucholS"
+
+MASTER_IP = "192.168.56.110"
+
+VM_PROVIDER = "virtualbox"
+
+VM_MEMORY = 2048
+VM_CPUS = 3
+
 Vagrant.configure("2") do |config|
   
   # Machine 1: lpucholS (Server)
-  config.vm.define "lpucholS" do |server|
+  config.vm.define MASTER_NODE do |server|
 
     # configure the box
-    server.vm.box = "debian/bookworm64"
-    server.vm.hostname = "lpucholS"
-    server.vm.network "public_network", bridge: "eth1", ip: "192.168.56.110"
-    server.vm.provider "virtualbox" do |vb|
-      vb.memory = 2048
-      vb.cpus = 3
+    server.vm.box = VM_BOX
+    server.vm.hostname = MASTER_NODE
+    server.vm.network "public_network", bridge: "eth1", ip: MASTER_IP
+    server.vm.provider VM_PROVIDER do |vb|
+      vb.memory = VM_MEMORY
+      vb.cpus = VM_CPUS
     end
     # Provision K3s controller installation
     # --flannel-iface=eth1: Override default flannel interface consequently set the service on ip of his node

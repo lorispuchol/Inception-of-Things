@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
     # configure the box
     server.vm.box = VM_BOX
     server.vm.hostname = MASTER_NODE
-    server.vm.network "private_network", bridge: "eth1", ip: SERVER_IP
+    server.vm.network "private_network", bridge: "eth1", ip: MASTER_IP
     server.vm.provider VM_PROVIDER do |vb|
       vb.memory = VM_MEMORY
       vb.cpus = VM_CPUS
@@ -56,8 +56,8 @@ Vagrant.configure("2") do |config|
       sudo chmod 644 /etc/rancher/k3s/k3s.yaml
       echo "alias k=kubectl" >> .bashrc
       export PATH=$PATH:/sbin
-    SHELL
-  end
+      SHELL
+    end
 
   # Machine 2: lpucholSW (ServerWorker)
   config.vm.define WORKER_NODE do |serverworker|
