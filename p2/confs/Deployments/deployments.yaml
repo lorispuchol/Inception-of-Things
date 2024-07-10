@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-one
+  name: app-one-deployement
   labels:
     app: app-one
 spec:
@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: app-one
-  template:
+  template: # template of Pod Manifest: it is exactly the same schema as a Pod manifest, except it is nested and does not have an apiVersion or kind
     metadata:
       labels:
         app: app-one
@@ -20,50 +20,50 @@ spec:
         ports:
         - containerPort: 80
 
----
+# ---
 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: app-two
-  labels:
-    app: app-two
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: app-two
-  template:
-    metadata:
-      labels:
-        app: app-two
-    spec:
-      containers:
-      - name: app-two
-        image: paulbouwer/hello-kubernetes:1
-        ports:
-        - containerPort: 80
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: app-two
+#   labels:
+#     app: app-two
+# spec:
+#   replicas: 3
+#   selector:
+#     matchLabels:
+#       app: app-two
+#   template:
+#     metadata:
+#       labels:
+#         app: app-two
+#     spec:
+#       containers:
+#       - name: app-two
+#         image: paulbouwer/hello-kubernetes:1
+#         ports:
+#         - containerPort: 80
 
----
+# ---
 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: app-three
-  labels:
-    app: app-three
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: app-three
-  template:
-    metadata:
-      labels:
-        app: app-three
-    spec:
-      containers:
-      - name: app-three
-        image: paulbouwer/hello-kubernetes:1
-        ports:
-        - containerPort: 80
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: app-three
+#   labels:
+#     app: app-three
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: app-three
+#   template:
+#     metadata:
+#       labels:
+#         app: app-three
+#     spec:
+#       containers:
+#       - name: app-three
+#         image: paulbouwer/hello-kubernetes:1
+#         ports:
+#         - containerPort: 80

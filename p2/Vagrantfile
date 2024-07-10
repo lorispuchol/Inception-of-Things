@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
     # configure the box
     server.vm.box = "debian/bookworm64"
     server.vm.hostname = "lpucholS"
-    server.vm.network "private_network", bridge: "eth1", ip: "192.168.56.110"
+    server.vm.network "public_network", bridge: "eth1", ip: "192.168.56.110"
     server.vm.provider "virtualbox" do |vb|
       vb.memory = 2048
       vb.cpus = 3
