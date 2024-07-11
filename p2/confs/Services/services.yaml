@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     app: app-one
-  type: ClusterIP
+  type: ClusterIP # default type if omitted
   ports:
     - protocol: TCP
       port: 80
@@ -24,4 +24,34 @@ spec:
 #       port: 80
 #       nodePort: 30601
 #       # targetPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-two-service
+spec:
+  selector:
+    app: app-two
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-three-service
+spec:
+  selector:
+    app: app-three
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
 
