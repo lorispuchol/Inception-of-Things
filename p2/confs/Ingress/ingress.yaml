@@ -11,9 +11,9 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: app-one-service
+            name: app-one-service # Service to forward request to
             port:
-              number: 80
+              number: 80 # Port on wich the Service is exposed
   - host: app-two.com
     http:
       paths:

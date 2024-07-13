@@ -7,7 +7,7 @@ metadata:
 spec:
   replicas: 1
   selector: # to identify the Pods to manage.
-    matchLabels: 
+    matchLabels: # with these labels 
       app: app-one
   template: # template of Pod Manifest: it is exactly the same schema as a Pod manifest, except it is nested and does not have an apiVersion or kind
     metadata:
@@ -17,8 +17,8 @@ spec:
       containers:
       - name: app-one
         image: paulbouwer/hello-kubernetes:1
-        # ports:
-        # - containerPort: 8080
+        ports: #
+        - containerPort: 8080 #
         env:
           - name: MESSAGE
             value: "Hello from app1."

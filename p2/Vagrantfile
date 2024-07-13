@@ -31,9 +31,16 @@ Vagrant.configure("2") do |config|
       sudo systemctl disable nftables
       # sudo curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --flannel-iface=eth1" sh -
       sudo curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --node-ip=192.168.56.110 --flannel-iface=eth1 --write-kubeconfig-mode=644" sh -
+      # sudo curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --node-external-ip=192.168.56.110 --write-kubeconfig-mode=644" sh -
       # sudo chmod 644 /etc/rancher/k3s/k3s.yaml
       echo "alias k=kubectl" >> .bashrc
-      export PATH=$PATH:/sbin
+      echo "export PATH=$PATH:/sbin" >> /home/vagrant/.bashrc
+
+      sudo kubectl apply -f /vagrant/confs/Deployments/deployments.yaml
+      sudo kubectl apply -f /vagrant/confs/Services/services.yaml
+      sudo kubectl apply -f /vagrant/confs/Ingress/ingress.yaml
+      
+      source /home/vagrant/.bashrc
     SHELL
   end
 end
