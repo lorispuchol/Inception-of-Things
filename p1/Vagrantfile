@@ -48,14 +48,19 @@ Vagrant.configure("2") do |config|
     server.vm.provision "shell", inline: <<-SHELL
       sudo apt-get update
       sudo apt-get install -y curl net-tools
+      
       sudo systemctl stop nftables
       sudo systemctl disable nftables
+      
       sudo curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --flannel-iface=eth1" sh -
+      
       sudo mkdir -p /vagrant/credentials
       sudo cp -f /var/lib/rancher/k3s/server/node-token /vagrant/credentials/
       sudo chmod 644 /etc/rancher/k3s/k3s.yaml
+
       echo "alias k=kubectl" >> /home/vagrant/.bashrc
       echo "export PATH=$PATH:/sbin" >> /home/vagrant/.bashrc
+      source /home/vagrant/.bashrc
       SHELL
     end
 
@@ -77,9 +82,12 @@ Vagrant.configure("2") do |config|
     serverworker.vm.provision "shell", inline: <<-SHELL
       sudo apt-get update
       sudo apt-get install -y curl net-tools
+      
       sudo systemctl stop nftables
       sudo systemctl disable nftables
+      
       sudo curl -sfL https://get.k3s.io | K3S_URL=https://192.168.56.110:6443 K3S_TOKEN_FILE="/vagrant/credentials/node-token" INSTALL_K3S_EXEC="agent --flannel-iface=eth1" sh -
+      
       echo "export PATH=$PATH:/sbin" >> /home/vagrant/.bashrc
       source /home/vagrant/.bashrc
     SHELL
