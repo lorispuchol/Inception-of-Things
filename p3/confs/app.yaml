@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployement
+  labels:
+    app: app
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: app
+        image: wil42/playground:v1
+        ports: #
+        - containerPort: 8888 #
+
+--- 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  labels:
+    app: app
+  namespace: dev
+spec:
+  selector: # The set of Pods targeted by a Service
+    app: app
+  type: NodePort # the default type if type is omitted
+  ports:
+    - protocol: TCP
+      port: 80 # Port on wich the Service is exposed
+      nodePort: 30080 # Exposes the Service on each Node's IP at a static port
+      targetPort: 8888 # App's port to forward request to (Here wil42/playground)

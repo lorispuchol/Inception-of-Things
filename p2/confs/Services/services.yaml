@@ -9,7 +9,7 @@ spec:
   ports:
     - protocol: TCP
       port: 80 # Port on wich the Service is exposed
-      targetPort: 8080
+      targetPort: 8080 # App's port to forward request to (Here paulbouwer/hello-kubernetes)
 
 # apiVersion: v1
 # kind: Service
@@ -23,7 +23,7 @@ spec:
 #     - protocol: TCP
 #       port: 80
 #       nodePort: 30601
-#       # targetPort: 8080
+#       targetPort: 8080
 
 ---
 
