@@ -1,14 +1,14 @@
 # Create the k3d cluster with agent:0 accessible by port mapping
-k3d cluster create p3 -p "8082:30080@agent:0" --agents 2
+sudo k3d cluster create p3 -p "8082:30080@agent:0" --agents 2
 
-kubectl create namespace argocd
-kubectl create namespace dev
+sudo kubectl create namespace argocd
+sudo kubectl create namespace dev
 
 # Install Wil42/playground App
-kubectl apply -f confs/app.yaml -n dev
+sudo kubectl apply -f confs/app.yaml -n dev
 
 #Install ArgoCD
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 # Get ArgoCD password
 sudo kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
