@@ -33,9 +33,9 @@ metadata:
 spec:
   selector: # The set of Pods targeted by a Service
     app: app
-  type: NodePort # the default type if type is omitted
+  type: NodePort # Expose the Service on each cluster's nodes
   ports:
     - protocol: TCP
       port: 80 # Port on wich the Service is exposed
-      nodePort: 30080 # Exposes the Service on each Node's IP at a static port
+      nodePort: 30080 # Exposes the Service on this port of Each node
       targetPort: 8888 # App's port to forward request to (Here wil42/playground)
