@@ -13,7 +13,7 @@ spec:
           service:
             name: app-one-service # Service to forward request to
             port:
-              number: 80 # Port on wich the Service is exposed
+              number: 80 # Port on wich the Service is exposed to access by the Ingress
   - host: app-two.com
     http:
       paths:
