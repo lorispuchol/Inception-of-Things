@@ -17,6 +17,7 @@ sudo kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.dat
 # A batter way is to Set up a LoadBalancer because if the terminal or the service crash ArgoCD become inaccessible
 ## https://k3d.io/v5.3.0/usage/exposing_services/
 ## https://metallb.universe.tf/
+
 sudo kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 # curl localhost:8082
