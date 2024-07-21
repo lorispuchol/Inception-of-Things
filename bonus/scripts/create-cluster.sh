@@ -6,7 +6,7 @@ sudo kubectl create namespace dev
 sudo kubectl create namespace gitlab
 
 # Install Wil42/playground App
-sudo kubectl apply -f confs/app.yaml -n dev
+sudo kubectl apply -f confs/app/app.yaml -n dev
 # curl localhost:8082
 
 #Install ArgoCD
@@ -32,10 +32,9 @@ sudo kubectl port-forward svc/argocd-server -n argocd 8080:443
 # Install MetalLB
 sudo kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.7/config/manifests/metallb-native.yaml
 
-# Apply confs for LoadBalancer and ingress
+# Apply confs for LoadBalancer
 sudo kubectl apply -f confs/LoadBalancer/l2.yaml
 sudo kubectl apply -f confs/LoadBalancer/ip.yaml
-# sudo kubectl apply -f confs/ingress.yaml
 
 # Patch ArgoCD service as LoadBalancer type
 sudo kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}' # define ip du loadBalancer
@@ -45,20 +44,21 @@ sudo kubectl apply -f confs/app-argocd.yaml
 
 #Install Helm
 wget https://get.helm.sh/helm-v3.15.3-linux-amd64.tar.gz
-tar -zxvf helm-v3.0.0-linux-amd64.tar.gz
+tar -zxvf helm-v3.15.3-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
 
-# install Gitlab
+# install Gitlab with minikube configuration
 sudo helm repo add gitlab https://charts.gitlab.io/
 sudo helm repo update
 
-helm upgrade --install gitlab gitlab/gitlab \
+sudo helm upgrade --install gitlab gitlab/gitlab \
    --timeout 600s   \
-   --namespace=gitlab   \
-   --set global.hosts.domain=$(minikube ip).nip.io \ 
-   --set global.hosts.externalIP=$(minikube ip) \
+   --namespace gitlab \
+   --set global.hosts.domain=gitlab.example.com \
+   --set global.hosts.externalIP=172.18.0.44 \
    -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube-minimum.yaml
 
-sudo kubectl patch svc gitlab-webservice-default -n gitlab -p '{"spec": {"type": "LoadBalancer"}}' 
+
+sudo kubectl patch svc gitlab-webservice-default -n gitlab -p '{"spec": {"type": "LoadBalancer"}}'
 
 sudo kubectl apply -f confs/ingress/ingress.yaml
