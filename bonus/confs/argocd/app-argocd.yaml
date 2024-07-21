@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/lorispuchol/Inception-of-Things-lpuchol.git
     targetRevision: HEAD
-    path: p3/confs/app
+    path: bonus/confs/app
   destination:
     server: https://kubernetes.default.svc
     namespace: dev

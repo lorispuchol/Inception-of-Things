@@ -36,6 +36,7 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 # sha256sum: WARNING: 1 computed checksum did NOT match
 
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+sudo chown -R $USER $HOME/.kube
 
 echo "alias k='sudo kubectl'" >> /home/loris/.zshrc
 source /home/loris/.zshrc
