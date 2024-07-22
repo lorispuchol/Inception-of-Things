@@ -4,7 +4,7 @@ metadata:
   name: ingress
 spec:
   rules:
-  - host: gitlab.example.com
+  - host: gitlab-bonus.com
     http:
       paths:
       - path: /
