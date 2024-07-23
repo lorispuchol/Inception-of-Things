@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/lorispuchol/Inception-of-Things-lpuchol.git
+    repoURL: http://gitlab-webservice-default.gitlab.svc:8181/root/lpuchol.git
     targetRevision: HEAD
-    path: bonus/confs/app
+    path: bonus/
   destination:
     server: https://kubernetes.default.svc
     namespace: dev

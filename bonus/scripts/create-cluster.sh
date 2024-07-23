@@ -58,7 +58,7 @@ sudo kubectl apply -f confs/LoadBalancer/ip.yaml
 
 # Patch ArgoCD service as LoadBalancer type. It will automatically get an IP of metalLB
 # An external IP address is assigned to the service
-sudo kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+sudo kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer", "externalIPs": ["172.18.0.41"]}}'
 
 # Conf ArgoCD for app
 sudo kubectl apply -f confs/argocd/app-argocd.yaml
@@ -76,18 +76,18 @@ sudo helm repo update
 sudo helm upgrade --install gitlab gitlab/gitlab \
    --timeout 600s   \
    --namespace gitlab \
+   --set global.edition=ce \
    -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube-minimum.yaml
-
 
 sudo kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.7/config/manifests/metallb-native.yaml
 sleep 2
-if ! sudo kubectl wait --for=condition=Ready pod --selector=app=webservice -n gitlab; then
+if ! sudo kubectl wait --for=condition=Ready pod --selector=app=webservice -n gitlab --timeout=300s; then
   echo "${RED}Gitlab is not ready${NC}"
   exit 1
 fi
 echo "${GREEN}Gitlab is ready${NC}"
 
-sudo kubectl patch svc gitlab-webservice-default -n gitlab -p '{"spec": {"type": "LoadBalancer"}}'
+sudo kubectl patch svc gitlab-webservice-default -n gitlab -p '{"spec": {"type": "LoadBalancer", "externalIPs": ["172.18.0.42"]}}'
 
 
 # Ingress isn't usefull, we can access to gitlab by port 8181
