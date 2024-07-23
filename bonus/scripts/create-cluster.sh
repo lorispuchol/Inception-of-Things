@@ -43,7 +43,7 @@ echo "ArgoCD password: $(sudo kubectl -n argocd get secret argocd-initial-admin-
 ## https://argo-cd.readthedocs.io/en/stable/getting_started/
 
 
-# Install MetalLB
+# Install MetalLB which expose the cluster on the pool of ip
 sudo kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.7/config/manifests/metallb-native.yaml
 sleep 2
 if ! sudo kubectl wait --namespace metallb-system --for=condition=Ready pod --selector=app=metallb --timeout=300s; then
@@ -78,6 +78,20 @@ sudo helm upgrade --install gitlab gitlab/gitlab \
    --namespace gitlab \
    -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube-minimum.yaml
 
+
+sudo kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.7/config/manifests/metallb-native.yaml
+sleep 2
+if ! sudo kubectl wait --for=condition=Ready pod --selector=app=webservice -n gitlab; then
+  echo "${RED}Gitlab is not ready${NC}"
+  exit 1
+fi
+echo "${GREEN}Gitlab is ready${NC}"
+
 sudo kubectl patch svc gitlab-webservice-default -n gitlab -p '{"spec": {"type": "LoadBalancer"}}'
 
+
+# Ingress isn't usefull, we can access to gitlab by port 8181
+# Ingress is usefull because if we want to access git by port 8080, we have no return of the statics datas like javascript
+# So the ingress permit to have the return of all this datas.
+# The ingress take a ip in the pool of metalLB, same as traefik because traekik works the ingress
 sudo kubectl apply -f confs/ingress/ingress.yaml

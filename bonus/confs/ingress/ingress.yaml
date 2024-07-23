@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress
+  namespace: gitlab
 spec:
   rules:
   - host: gitlab-bonus.com
@@ -13,4 +14,4 @@ spec:
           service:
             name: gitlab-webservice-default # Service to forward request to
             port:
-              number: 8181 # Port on wich the Service is exposed to access by the Ingress
+              number: 8080 # Port on wich the Service is exposed to access by the Ingress
